@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import * as S from "./styles";
 
 function App() {
-  const [count, setCount] = useState(0);
   const [on, setOn] = useState(false);
+  const [count, setCount] = useState(0);
   const [timer, setTimer] = useState(0);
+  const [size, setSize] = useState(0);
 
   useEffect(() => {
     if (on) {
@@ -15,39 +16,50 @@ function App() {
     };
   });
 
+  useEffect(() => {
+    if (count >= 100) {
+      handleUse();
+    }
+  }, [count]);
+
   const handleUse = () => {
+    alert("사용 가능한 클릭 횟수를 초과했습니다.");
+    setSize(1000);
+  };
+
+  const handleReset = () => {
     setOn(!on);
-    setCount(0);
+    setTimeout(() => {
+      setSize(0);
+      setCount(0);
+    });
   };
 
   const handleClick = () => {
     setCount(count + 1);
-    // Todo: 커서 1.25배
+    setSize(size + 0.25);
     clearTimeout(timer);
-
-    let timerId = setTimeout(() => alert("5분뒤 커서 크기 원래대로"), 300000);
+    let timerId = setTimeout(() => {
+      setSize(0);
+      setCount(0);
+    }, 3000);
     setTimer(timerId);
-
-    if (count >= 99) {
-      handleUse();
-      // Todo: 마우스 완전 크게 꽉채우기
-    }
   };
-  //window 객체에 scroll & mouse 이벤트를 추가하고 cursor함수 실행되도록 함
+
   window.addEventListener("scroll", cursor);
   window.addEventListener("mousemove", cursor);
-  //커스텀 커서의 left값과 top값을 커서의 XY좌표값과 일치시킴
   function cursor(e) {
     let mouseCursor = document.querySelector(".cursor");
+    console.log(mouseCursor);
     mouseCursor.style.left = e.pageX + "px";
     mouseCursor.style.top = e.pageY + "px";
   }
 
   return (
     <S.App>
-      <S.Cursor />
+      <S.Cursor className="cursor" size={size} />
       <p>마우스 클릭 제어 확장 프로그램입니다.</p>
-      <button onClick={() => handleUse()}> 프로그램 사용 </button>
+      <button onClick={() => handleReset()}> 프로그램 사용 </button>
       <p>{count}번 클릭했습니다.</p>
     </S.App>
   );

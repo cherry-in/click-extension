@@ -11,9 +11,9 @@ export const App = styled.div`
 `;
 
 export const Cursor = styled.div`
-width: 10rem;
-  height: 10rem;
-  border: 2px solid black;
+  width: ${(props) => props.size}rem;
+  height: ${(props) => props.size}rem;
+  // border: 2px solid black;
   position: absolute;
   z-index: 1000;
   transform: translate(-50%, -50%);
@@ -22,7 +22,5 @@ width: 10rem;
   transition-property: background, transform;
   transform-origin: 100% 100%;
   background-size: cover;
-  background-color: white;
-  cursor: pointer;
-}
+  background-color: red;
 `;
